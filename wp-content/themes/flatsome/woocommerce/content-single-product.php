@@ -4,9 +4,9 @@
  *
  * Override this template by copying it to yourtheme/woocommerce/content-single-product.php
  *
- * @author        WooThemes
- * @package       WooCommerce/Templates
- * @version       3.0.0
+ * @author 		WooThemes
+ * @package 	WooCommerce/Templates
+ * @version     3.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -14,25 +14,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 ?>
-<div class="container">
-	<?php
+<div id="product-<?php the_ID(); ?>" <?php post_class(); ?>>
+<?php
 	/**
-	 * Hook Woocommerce_before_single_product.
+	 * woocommerce_before_single_product hook
 	 *
 	 * @hooked wc_print_notices - 10
 	 */
-	do_action( 'woocommerce_before_single_product' );
-	if ( post_password_required() ) {
-		echo get_the_password_form(); // WPCS: XSS ok.
-		return;
-	}
-	?>
-</div><!-- /.container -->
-<div id="product-<?php the_ID(); ?>" <?php post_class(); ?>>
-	<?php
-	// Get product page layout
-	wc_get_template_part( 'single-product/layouts/product', flatsome_option( 'product_layout' ) );
+	 do_action( 'woocommerce_before_single_product' );
 
-	do_action( 'woocommerce_after_single_product' );
-	?>
+	 if ( post_password_required() ) {
+	 	echo get_the_password_form();
+	 	return;
+	 }
+
+	 // Get product page layout
+	 wc_get_template_part( 'single-product/layouts/product', flatsome_option('product_layout'));
+
+	 do_action( 'woocommerce_after_single_product' );
+
+?>
 </div>

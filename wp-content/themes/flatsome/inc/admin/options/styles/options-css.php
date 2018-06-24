@@ -10,39 +10,30 @@ Flatsome_Option::add_section( 'custom-css', array(
 ) );
 
 Flatsome_Option::add_field( 'option',  array(
-	'type'        => 'code',
+	'type'        => 'textarea',
 	'settings'     => 'html_custom_css',
 	'label'       => __( 'Custom CSS', 'flatsome-admin' ),
 	'section'     => 'custom-css',
 	'transport'   => $transport,
 	'placeholder' => '.add-css-here{}',
-  'choices'     => array(
-    'language' => 'css',
-  ),
 ));
 
 Flatsome_Option::add_field( 'option',  array(
-  'type'        => 'code',
+	'type'        => 'textarea',
 	'settings'     => 'html_custom_css_tablet',
 	'label'       => __( 'Custom Tablet CSS', 'flatsome-admin' ),
 	'section'     => 'custom-css',
 	'default'     => '',
   'placeholder' => '.add-css-here{}',
 	'transport'   => $transport,
-  'choices'     => array(
-    'language' => 'css',
-  ),
 ));
 
 Flatsome_Option::add_field( 'option',  array(
-	'type'        => 'code',
+	'type'        => 'textarea',
 	'settings'     => 'html_custom_css_mobile',
 	'label'       => __( 'Custom Mobile CSS', 'flatsome-admin' ),
 	'section'     => 'custom-css',
 	'default'     => '',
   'placeholder' => '.add-css-here{}',
 	'transport'   => $transport,
-  'choices'     => array(
-    'language' => 'css',
-  ),
 ));

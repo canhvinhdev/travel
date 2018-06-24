@@ -7,12 +7,6 @@ remove_action( 'woocommerce_before_main_content', 'woocommerce_breadcrumb', 20 )
 remove_action( 'woocommerce_before_shop_loop', 'woocommerce_result_count', 20 );
 remove_action( 'woocommerce_before_shop_loop', 'woocommerce_catalog_ordering', 30 );
 
-if ( fl_woocommerce_version_check( '3.3.0' ) ) {
-	/** $GLOBALS['woocommerce_loop'] will not be set in time otherwise. */
-	remove_action( 'woocommerce_before_shop_loop', 'wc_setup_loop' );
-	add_action( 'flatsome_category_title_alt', 'wc_setup_loop' );
-}
-
 add_action( 'flatsome_category_title_alt', 'woocommerce_result_count', 20 );
 add_action( 'flatsome_category_title_alt', 'woocommerce_catalog_ordering', 30 );
 
@@ -24,7 +18,7 @@ if ( ! function_exists( 'flatsome_category_header' ) ) {
 		global $wp_query;
 
 		// Set Custom Shop Header.
-		if ( get_theme_mod( 'html_shop_page' ) && is_shop() && ! $wp_query->is_search() && $wp_query->query_vars['paged'] < 1 ) {
+		if ( get_theme_mod( 'html_shop_page' ) && is_shop() && $wp_query->query_vars['paged'] < 1 ) {
 			echo do_shortcode( '<div class="custom-page-title">' . get_theme_mod( 'html_shop_page' ) . '</div>' );
 			wc_get_template_part( 'layouts/headers/category-title' );
 		} // Set Category headers.

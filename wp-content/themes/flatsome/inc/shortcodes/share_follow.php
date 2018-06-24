@@ -17,17 +17,11 @@ function flatsome_share($atts, $content = null) {
 	global $post;
 	if(!$post) return false;
 
-	$post_id   = $post->ID;
-	$permalink = get_permalink( $post_id );
+	$permalink = get_permalink($post->ID);
 
-	if ( is_woocommerce_activated() && is_shop() ) {
-		$post_id   = wc_get_page_id( 'shop' );
-		$permalink = get_permalink( $post_id );
-	}
-
-	$featured_image =  wp_get_attachment_image_src( get_post_thumbnail_id( $post_id ), 'large');
+	$featured_image =  wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), 'large');
 	$featured_image_2 = $featured_image['0'];
-	$post_title = rawurlencode(get_the_title($post_id));
+	$post_title = rawurlencode(get_the_title($post->ID));
 	$whatsapp_text = $post_title.' - '.$permalink;
 
 	if($title) $title = '<span class="share-icons-title">'.$title.'</span>';
@@ -105,7 +99,6 @@ function flatsome_follow($atts, $content = null) {
 		'facebook' => '',
 		'pinterest' => '',
 		'email' => '',
-		'phone' => '',
 		'googleplus' => '',
 		'instagram' => '',
 		'rss' => '',
@@ -138,7 +131,6 @@ function flatsome_follow($atts, $content = null) {
 		$vkontakte = get_theme_mod('follow_vk');
 		$flickr = get_theme_mod('follow_flickr');
 		$email = get_theme_mod('follow_email');
-		$phone = get_theme_mod('follow_phone');
 		$rss = get_theme_mod('follow_rss');
 	}
 
@@ -178,13 +170,9 @@ function flatsome_follow($atts, $content = null) {
 	       </a>
 		<?php }?>
 		<?php if($email){?>
-		     <a href="mailto:<?php echo $email; ?>" data-label="E-mail"  rel="nofollow" class="<?php echo $style; ?>  email tooltip" title="<?php _e('Send us an email','flatsome') ?>"><?php echo get_flatsome_icon('icon-envelop'); ?>
+		     <a href="mailto:<?php echo $email; ?>" target="_blank"  data-label="E-mail"  rel="nofollow" class="<?php echo $style; ?>  email tooltip" title="<?php _e('Send us an email','flatsome') ?>"><?php echo get_flatsome_icon('icon-envelop'); ?>
 			</a>
 		<?php }?>
-	    <?php if($phone){?>
-			<a href="tel:<?php echo $phone; ?>" target="_blank"  data-label="Phone"  rel="nofollow" class="<?php echo $style; ?>  phone tooltip" title="<?php _e('Call us','flatsome') ?>"><?php echo get_flatsome_icon('icon-phone'); ?>
-			</a>
-	    <?php }?>
 		<?php if($pinterest){?>
 		       <a href="<?php echo $pinterest; ?>" target="_blank" rel="nofollow"  data-label="Pinterest"  class="<?php echo $style; ?>  pinterest tooltip" title="<?php _e('Follow on Pinterest','flatsome') ?>"><?php echo get_flatsome_icon('icon-pinterest'); ?>
 		       </a>

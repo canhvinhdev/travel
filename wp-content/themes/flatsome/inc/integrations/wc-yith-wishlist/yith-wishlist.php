@@ -13,17 +13,13 @@ if ( ! function_exists( 'flatsome_wishlist_integrations_scripts' ) ) {
 	function flatsome_wishlist_integrations_scripts() {
 		global $integrations_uri;
 
-		wp_dequeue_style( 'yith-wcwl-main' );
-		wp_deregister_style( 'yith-wcwl-main' );
-		wp_dequeue_style( 'yith-wcwl-font-awesome' );
 		wp_deregister_style( 'yith-wcwl-font-awesome' );
-
-		// TODO 4.0 Move and apply on AJAX search plugin.
-		wp_dequeue_style( 'yith_wcas_frontend' );
+		wp_deregister_style( 'yith-wcwl-font-awesome-ie7' );
+		wp_deregister_style( 'yith-wcwl-main' );
 		wp_deregister_style( 'yith_wcas_frontend' );
 
-		wp_enqueue_script( 'flatsome-woocommerce-wishlist',  $integrations_uri . '/wc-yith-wishlist/wishlist.js', array( 'jquery', 'flatsome-js' ), '3.4', true );
-		wp_enqueue_style( 'flatsome-woocommerce-wishlist', $integrations_uri . '/wc-yith-wishlist/wishlist.css', 'flatsome-woocommerce-style', '3.4' );
+		wp_enqueue_script( 'flatsome-woocommerce-wishlist', $integrations_uri . '/wc-yith-wishlist/wishlist.js', 'flatsome-woocommerce-js', '3.3', true );
+		wp_enqueue_style( 'flatsome-woocommerce-wishlist', $integrations_uri . '/wc-yith-wishlist/wishlist.css', 'flatsome-woocommerce-style', '3.3' );
 	}
 }
 add_action( 'wp_enqueue_scripts', 'flatsome_wishlist_integrations_scripts' );

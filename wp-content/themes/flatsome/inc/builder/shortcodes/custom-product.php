@@ -191,12 +191,9 @@ add_ux_builder_shortcode( 'ux_product_hook', array(
       'heading' => 'Hook',
       'default' => 'woocommerce_single_product_summary',
       'options' => array(
-        'woocommerce_before_single_product_summary' => 'woocommerce_before_single_product_summary',
         'woocommerce_single_product_summary' => 'woocommerce_single_product_summary',
+        'woocommerce_before_single_product_summary' => 'woocommerce_before_single_product_summary',
         'woocommerce_after_single_product_summary' => 'woocommerce_after_single_product_summary',
-        'flatsome_custom_single_product_1' => 'flatsome_custom_single_product_1',
-        'flatsome_custom_single_product_2' => 'flatsome_custom_single_product_2',
-        'flatsome_custom_single_product_3' => 'flatsome_custom_single_product_3',
       )
     ))
 ) );

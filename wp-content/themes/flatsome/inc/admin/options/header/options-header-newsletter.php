@@ -10,16 +10,6 @@ Flatsome_Option::add_section( 'header_newsletter',
 	)
 );
 
-Flatsome_Option::add_field( '',
-	array(
-		'type'     => 'custom',
-		'settings' => 'custom_title_header_newsletter_layout',
-		'label'    => __( '', 'flatsome-admin' ),
-		'section'  => 'header_newsletter',
-		'default'  => '<div class="options-title-divider">Layout</div>',
-	)
-);
-
 Flatsome_Option::add_field( 'option',
 	array(
 		'type'      => 'radio-image',
@@ -150,74 +140,6 @@ Flatsome_Option::add_field( 'option',
 		'section'         => 'header_newsletter',
 		'default'         => '500px',
 		'transport'       => $transport,
-	)
-);
-
-Flatsome_Option::add_field( '',
-	array(
-		'type'     => 'custom',
-		'settings' => 'custom_title_header_newsletter_behavior',
-		'label'    => __( '', 'flatsome-admin' ),
-		'section'  => 'header_newsletter',
-		'default'  => '<div class="options-title-divider">Behavior</div>',
-	)
-);
-
-Flatsome_Option::add_field( 'option',
-	array(
-		'type'      => 'checkbox',
-		'settings'  => 'header_newsletter_auto_open',
-		'label'     => __( 'Auto Open', 'flatsome-admin' ),
-		'section'   => 'header_newsletter',
-		'transport' => $transport,
-		'default'   => false,
-	)
-);
-
-Flatsome_Option::add_field( 'option',
-	array(
-		'type'            => 'slider',
-		'settings'        => 'header_newsletter_auto_timer',
-		'active_callback' => array(
-			array(
-				'setting'  => 'header_newsletter_auto_open',
-				'operator' => '==',
-				'value'    => true,
-			),
-		),
-		'label'           => __( 'Auto Timer', 'flatsome-admin' ),
-		'description'     => __( 'In milliseconds (1000ms = 1sec).', 'flatsome-admin' ),
-		'section'         => 'header_newsletter',
-		'transport'       => $transport,
-		'default'         => 3000,
-		'choices'         => array(
-			'min'  => 1000,
-			'max'  => 60000,
-			'step' => 500,
-		),
-	)
-);
-
-Flatsome_Option::add_field( 'option',
-	array(
-		'type'            => 'select',
-		'settings'        => 'header_newsletter_auto_show',
-		'active_callback' => array(
-			array(
-				'setting'  => 'header_newsletter_auto_open',
-				'operator' => '==',
-				'value'    => true,
-			),
-		),
-		'label'           => __( 'Auto Show', 'flatsome-admin' ),
-		'section'         => 'header_newsletter',
-		'transport'       => $transport,
-		'default'         => 'always',
-		'multiple'        => 0,
-		'choices'         => array(
-			'always' => __( 'Always', 'flatsome-admin' ),
-			'once'   => __( 'Once', 'flatsome-admin' ),
-		),
 	)
 );
 

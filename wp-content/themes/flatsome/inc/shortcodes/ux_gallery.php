@@ -13,8 +13,6 @@ function ux_gallery($atts) {
       // Layout
       'style' => 'overlay',
       'columns' => '4',
-      'columns__sm' => '',
-      'columns__md' => '',
       'col_spacing' => '',
       'type' => '', // slider, row, masonery, grid
       'width' => '',
@@ -118,8 +116,6 @@ function ux_gallery($atts) {
       $repater['row_spacing'] = $col_spacing;
       $repater['row_width'] = $width;
       $repater['columns'] = $columns;
-      $repater['columns__sm'] = $columns__sm;
-      $repater['columns__md'] = $columns__md;
 
       // Get attachments
       $_attachments = get_posts( array( 'include' => $ids, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => $order, 'orderby' => $orderby ) );

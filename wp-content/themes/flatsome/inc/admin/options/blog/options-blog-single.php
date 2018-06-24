@@ -85,15 +85,6 @@ Flatsome_Option::add_field( 'option',
 
 Flatsome_Option::add_field( 'option',
 	array(
-		'type'     => 'checkbox',
-		'settings' => 'blog_single_next_prev_nav',
-		'label'    => __( 'Enable Next/Prev Navigation', 'flatsome-admin' ),
-		'section'  => 'blog-single',
-		'default'  => 1,
-	) );
-
-Flatsome_Option::add_field( 'option',
-	array(
 		'type'              => 'textarea',
 		'settings'          => 'blog_after_post',
 		'label'             => __( 'HTML after blog posts', 'flatsome-admin' ),

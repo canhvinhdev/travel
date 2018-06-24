@@ -32,13 +32,6 @@ class Flatsome_Upgrade {
 	private $running_version;
 
 	/**
-	 * Holds is upgrade completed
-	 *
-	 * @var bool
-	 */
-	private $is_upgrade_completed = false;
-
-	/**
 	 * Holds update callback that need to be run per version
 	 *
 	 * @var array
@@ -69,9 +62,7 @@ class Flatsome_Upgrade {
 		// If current version is new and current version has any update run it.
 		if ( version_compare( $this->db_version, $this->running_version, '<' ) && version_compare( $this->db_version, max( array_keys( $this->updates ) ), '<' ) ) {
 			$this->update();
-			if ( $this->is_upgrade_completed ) {
-				$this->update_db_version();
-			}
+			$this->update_db_version();
 		}
 	}
 
@@ -93,17 +84,16 @@ class Flatsome_Upgrade {
 				}
 			}
 		}
-		$this->is_upgrade_completed = true;
 	}
 
 	/**
 	 * Performs upgrades to Flatsome 3.4.0
 	 */
 	private function update_340() {
-		$portfolio_archive_filter = get_theme_mod( 'portfolio_archive_filter' );
-		if ( empty( $portfolio_archive_filter ) ) {
-			set_theme_mod( 'portfolio_archive_filter', 'left' );
-		}
+    $portfolio_archive_filter = get_theme_mod( 'portfolio_archive_filter' );
+    if ( empty( $portfolio_archive_filter ) ) {
+      set_theme_mod( 'portfolio_archive_filter', 'left' );
+    }
 	}
 
 	/**

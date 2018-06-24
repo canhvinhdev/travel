@@ -10,7 +10,6 @@
 /**
  * Require Classes
  */
-require get_template_directory() . '/inc/classes/class-flatsome-default.php';
 require get_template_directory() . '/inc/classes/class-flatsome-options.php';
 require get_template_directory() . '/inc/classes/class-flatsome-upgrade.php';
 

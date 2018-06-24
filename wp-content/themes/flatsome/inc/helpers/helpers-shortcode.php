@@ -172,9 +172,9 @@ function get_flatsome_repeater_end($type){
 /* Fix Normal Shortcodes */
 function flatsome_contentfix($content){
     $fix = array (
-            '<p>_____</p>' => '<div class="is-divider large"></div>',
-            '<p>____</p>' => '<div class="is-divider medium"></div>',
-            '<p>___</p>' => '<div class="is-divider small"></div>',
+            '_____' => '<div class="is-divider large"></div>',
+            '____' => '<div class="is-divider medium"></div>',
+            '___' => '<div class="is-divider small"></div>',
             '</div></p>' => '</div>',
             '<p><div' => '<div',
             ']</p>' => ']',

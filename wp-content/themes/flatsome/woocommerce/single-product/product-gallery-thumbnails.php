@@ -44,36 +44,22 @@ if ( $attachment_ids ) {
 
 
     if ( has_post_thumbnail() ) : ?>
-    <?php
-      $image_size = 'thumbnail';
-
-      // Check if custom gallery thumbnail size is set and use that
-      if( fl_woocommerce_version_check('3.3.3') ) {
-        $image_check = wc_get_image_size( 'gallery_thumbnail' );
-        if($image_check['width'] !== 100) $image_size = 'gallery_thumbnail';
-      }
-
-      $gallery_thumbnail = wc_get_image_size( $image_size ); ?>
-      <div class="col is-nav-selected first">
-        <a>
-          <?php
-            $image_id = get_post_thumbnail_id($post->ID);
-            $image =  wp_get_attachment_image_src( $image_id, 'woocommerce_'.$image_size );
-            $image = '<img src="'.$image[0].'" width="'.$gallery_thumbnail['width'].'" height="'.$gallery_thumbnail['height'].'" class="attachment-woocommerce_thumbnail" />';
-            echo $image;
-          ?>
-        </a>
-      </div>
+      <div class="col is-nav-selected first"><a><?php echo get_the_post_thumbnail( $post->ID, apply_filters( 'single_product_small_thumbnail_size', 'shop_thumbnail' ) ) ?></a></div>
     <?php endif;
 
     foreach ( $attachment_ids as $attachment_id ) {
 
       $classes = array( '' );
+      $image_title  = esc_attr( get_the_title( $attachment_id ) );
+      $image_caption  = esc_attr( get_post_field( 'post_excerpt', $attachment_id ) );
       $image_class = esc_attr( implode( ' ', $classes ) );
-      $image =  wp_get_attachment_image_src( $attachment_id, apply_filters( 'single_product_small_thumbnail_size', 'woocommerce_'.$image_size ));
-      $image = '<img src="'.$image[0].'" width="'.$gallery_thumbnail['width'].'" height="'.$gallery_thumbnail['height'].'"  class="attachment-woocommerce_thumbnail" />';
 
-      echo apply_filters( 'woocommerce_single_product_image_thumbnail_html', sprintf( '<div class="col"><a>%s</a></div>', $image ), $attachment_id, $post->ID, $image_class );
+      $image       = wp_get_attachment_image( $attachment_id, apply_filters( 'single_product_small_thumbnail_size', 'shop_thumbnail' ), 0, $attr = array(
+        'title' => $image_title,
+        'alt' => $image_title
+        ) );
+
+      echo apply_filters( 'woocommerce_single_product_image_thumbnail_html', sprintf( '<div class="col"><a class="%s" title="%s" >%s</a></div>', $image_class, $image_caption, $image ), $attachment_id, $post->ID, $image_class );
 
       $loop++;
     }

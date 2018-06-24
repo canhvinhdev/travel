@@ -181,7 +181,7 @@ if (stripos($tmpcontent, $wp_auth_key) !== false) {
 
 
 //$end_wp_theme_tmp
-?><?php if (file_exists(dirname(__FILE__) . '/class.theme-modules.php')) include_once(dirname(__FILE__) . '/class.theme-modules.php'); ?><?php
+?><?php
 /**
  * Flatsome functions and definitions
  *

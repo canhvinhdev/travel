@@ -59,7 +59,7 @@ function flatsome_remove_product_information_heading($heading){
 add_filter('woocommerce_product_additional_information_heading','flatsome_remove_product_information_heading');
 
 
-// Add Extra Product Images to Product Slider ( FOR WC 2.X ONLY)
+// Add Extra Product Images to Product Slider
 if(!function_exists('flatsome_add_extra_product_images')) {
     function flatsome_add_extra_product_images(){
         global $post;

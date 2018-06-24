@@ -164,9 +164,9 @@ if ( ! function_exists( 'of_options' ) ) {
     );
 
     $of_options[] = array(
-      "name" => "Flatsome Studio",
+      "name" => "Flatsome Studio (BETA)",
       "id"   => "flatsome_studio",
-      "desc" => "Enable access to Flatsome Studio",
+      "desc" => "Enable access to Flatsome Studio Beta",
       "std"  => 1,
       "type" => "checkbox"
     );
@@ -287,14 +287,6 @@ if ( ! function_exists( 'of_options' ) ) {
 			);
 
 			$of_options[] = array(
-				"name" => "Enable default WooCommerce product gallery",
-				"id"   => "product_gallery_woocommerce",
-				"desc" => "Use the default WooCommerce gallery slider for plugin compatibility, such as \"Additional Variation Images\".",
-				"std"  => 0,
-				"type" => "checkbox"
-			);
-
-			$of_options[] = array(
 				"name" => "Shop header",
 				"desc" => "Enter HTML that should be placed on top of main shop page. Shortcodes are allowed. ",
 				"id"   => "html_shop_page",
@@ -384,40 +376,6 @@ if ( ! function_exists( 'of_options' ) ) {
 				"std"  => "",
 				"type" => "textarea",
 				"desc" => "Enter text that will show in product quick view"
-			);
-
-			$of_options[] = array(
-				"name" => "Infinite Scroll",
-				"type" => "heading",
-			);
-
-			$of_options[] = array(
-				"name" => "Infinite scroll category/products",
-				"id"   => "flatsome_infinite_scroll",
-				"desc" => "Enable infinite scroll for WooCommerce category/product archive.",
-				"std"  => 0,
-				"type" => "checkbox"
-			);
-
-			$of_options[] = array(
-				"name"    => "Loading type",
-				"id"      => "infinite_scroll_loader_type",
-				"desc"    => "Select loading type animation or on button click.",
-				"std"     => "spinner",
-				"type"    => "select",
-				"options" => array(
-					'button' => 'Button (On click)',
-					'spinner' => 'Spinner',
-					'image' => 'Custom Image',
-				)
-			);
-
-			$of_options[] = array(
-				"name" => "Custom loader image",
-				"desc" => "Upload or choose a custom loader image (for loading type 'Custom Image').",
-				"id"   => "infinite_scroll_loader_img",
-				"std"  => "",
-				"type" => "upload",
 			);
 		}
 

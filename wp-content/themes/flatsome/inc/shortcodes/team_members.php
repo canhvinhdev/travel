@@ -16,11 +16,11 @@ function flatsome_team_member($atts, $content = null){
       'snapchat' => '',
       'youtube' => '',
       'email' => '',
-      'phone' => '',
       'linkedin' => '',
       'style' => '',
       'depth' => '',
       'depth_hover' => '',
+      'link' => '',
       'target' => '',
       // Box styles
       'animate' => '',
@@ -118,7 +118,7 @@ function flatsome_team_member($atts, $content = null){
                       <?php echo $title; ?>
                     </span>
                   </h4>
-                 <?php echo do_shortcode('[follow style="'.$icon_style.'" facebook="'.$facebook.'" twitter="'.$twitter.'" googleplus="'.$googleplus.'" snapchat="'.$snapchat.'" email="'.$email.'" phone="'.$phone.'" pinterest="'.$pinterest.'" youtube="'.$youtube.'" instagram="'.$instagram.'" linkedin="'.$linkedin.'"]'); ?>
+                 <?php echo do_shortcode('[follow style="'.$icon_style.'" facebook="'.$facebook.'" twitter="'.$twitter.'" googleplus="'.$googleplus.'" snapchat="'.$snapchat.'" email="'.$email.'" pinterest="'.$pinterest.'" youtube="'.$youtube.'" instagram="'.$instagram.'" linkedin="'.$linkedin.'"]'); ?>
                  <?php if($style  !== 'overlay' && $style  !== 'shade') echo do_shortcode($content); ?>
                 </div><!-- box-text-inner -->
           </div><!-- box-text -->

@@ -255,8 +255,7 @@ while ( $recentPosts->have_posts() ) : $recentPosts->the_post();
 					<?php if($excerpt !== 'false') { ?>
 					<p class="from_the_blog_excerpt <?php if($excerpt !== 'visible'){ echo 'show-on-hover hover-'.$excerpt; } ?>"><?php
 					  $the_excerpt = get_the_excerpt();
-					  $excerpt_more = apply_filters( 'excerpt_more', ' ' . '[...]' );
-					  echo flatsome_string_limit_words($the_excerpt, $excerpt_length) . $excerpt_more;
+					  echo flatsome_string_limit_words($the_excerpt, $excerpt_length) . '[...]';
 					?>
 					</p>
 					<?php } ?>

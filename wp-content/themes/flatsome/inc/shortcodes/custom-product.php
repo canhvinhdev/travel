@@ -37,7 +37,7 @@ add_shortcode("ux_product_title", function ($atts) {
   if($uppercase) $classes[] = 'is-uppercase';
 
   ob_start();
-  echo '<div class="'.implode(' ', $classes).'">';
+  echo '<div class="'.implode($classes,' ').'">';
   woocommerce_template_single_title();
   echo '</div>';
   return ob_get_clean();

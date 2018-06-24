@@ -1,0 +1,12 @@
+2018-06-23T10:54:15+00:00 CRITICAL Uncaught Error: Cannot unset string offsets in /opt/lampp/htdocs/travel/wp-includes/class-wp-customize-widgets.php:1092
+Stack trace:
+#0 /opt/lampp/htdocs/travel/wp-includes/class-wp-hook.php(286): WP_Customize_Widgets->preview_sidebars_widgets('')
+#1 /opt/lampp/htdocs/travel/wp-includes/plugin.php(203): WP_Hook->apply_filters('', Array)
+#2 /opt/lampp/htdocs/travel/wp-includes/widgets.php(917): apply_filters('sidebars_widget...', '')
+#3 /opt/lampp/htdocs/travel/wp-includes/class-wp-customize-widgets.php(378): wp_get_sidebars_widgets()
+#4 /opt/lampp/htdocs/travel/wp-includes/class-wp-customize-widgets.php(355): WP_Customize_Widgets->customize_register()
+#5 /opt/lampp/htdocs/travel/wp-includes/class-wp-hook.php(286): WP_Customize_Widgets->schedule_customize_register(Object(WP_Customize_Manager))
+#6 /opt/lampp/htdocs/travel/wp-includes/class-wp-hook.php(310): WP_Hook->apply_filters('', Array)
+#7 /opt/lampp/htdocs/travel/wp-includes/plugin.php(453): WP_Hook->do_action(Array)
+#8 /opt/lampp/htdocs/travel/wp-includes
+

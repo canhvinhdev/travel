@@ -20,10 +20,6 @@ if ( ! function_exists( 'flatsome_sale_flash' ) ) {
 	function flatsome_sale_flash( $text, $post, $_product, $badge_style ) {
 		global $wc_cpdf;
 
-		if ( ! is_a( $wc_cpdf, 'WC_Product_Data_Fields' ) ) {
-			return $text;
-		}
-
 		if ( $wc_cpdf->get_value( get_the_ID(), '_bubble_new' ) ) {
 
 			$bubble_text = $wc_cpdf->get_value( get_the_ID(), '_bubble_text' ) ? $wc_cpdf->get_value( get_the_ID(), '_bubble_text' ) : __( 'New', 'flatsome' );
@@ -35,7 +31,7 @@ if ( ! function_exists( 'flatsome_sale_flash' ) ) {
 		return $text;
 	}
 }
-add_filter( 'flatsome_product_labels', 'flatsome_sale_flash', 10, 4 );
+add_filter( 'flatsome_product_labels', 'flatsome_sale_flash', 10, 10, 3 );
 
 
 if ( ! function_exists( 'flatsome_woocommerce_get_alt_product_thumbnail' ) ) {
@@ -43,8 +39,7 @@ if ( ! function_exists( 'flatsome_woocommerce_get_alt_product_thumbnail' ) ) {
 	 * Get Hover image for WooCommerce Grid
 	 */
 	function flatsome_woocommerce_get_alt_product_thumbnail() {
-		$hover_style = get_theme_mod( 'product_hover', 'fade_in_back' );
-
+		$hover_style = flatsome_option( 'product_hover' );
 		if ( $hover_style !== 'fade_in_back' && $hover_style !== 'zoom_in' ) {
 			return;
 		}
@@ -65,7 +60,7 @@ if ( ! function_exists( 'flatsome_woocommerce_get_alt_product_thumbnail' ) ) {
 				}
 				$loop ++;
 				echo apply_filters( 'flatsome_woocommerce_get_alt_product_thumbnail',
-					wp_get_attachment_image( $attachment_id, 'woocommerce_thumbnail', false, array( 'class' => $class ) ) );
+					wp_get_attachment_image( $attachment_id, 'shop_catalog', false, array( 'class' => $class ) ) );
 				if ( $loop == 1 ) {
 					break;
 				}
@@ -153,7 +148,7 @@ if ( ! function_exists( 'flatsome_product_box_actions_add_to_cart' ) ) {
 				esc_attr( isset( $quantity ) ? $quantity : 1 ),
 				esc_attr( $product->get_id() ),
 				esc_attr( $product->get_sku() ),
-				esc_attr( $product->is_type( 'variable' ) || $product->is_type( 'grouped' ) ? '' : 'ajax_add_to_cart' ),
+				esc_attr( $product->is_type( 'variable' ) ? '' : 'ajax_add_to_cart' ),
 				esc_attr( isset( $class ) ? $class : 'add_to_cart_button' ),
 				esc_html( $product->add_to_cart_text() ) ),
 			$product );
@@ -175,7 +170,7 @@ if ( ! function_exists( 'flatsome_woocommerce_shop_loop_button' ) ) {
 			sprintf( '<div class="add-to-cart-button"><a href="%s" rel="nofollow" data-product_id="%s" class="%s %s product_type_%s button %s is-%s mb-0 is-%s">%s</a></div>',
 				esc_url( $product->add_to_cart_url() ),
 				esc_attr( $product->get_id() ),
-				esc_attr( $product->is_type( 'variable' ) || $product->is_type( 'grouped' ) ? '' : 'ajax_add_to_cart' ),
+				esc_attr( $product->is_type( 'variable' ) ? '' : 'ajax_add_to_cart' ),
 				$product->is_purchasable() && $product->is_in_stock() ? 'add_to_cart_button' : '',
 				esc_attr( $product->get_type() ),
 				esc_attr( 'primary' ), // Button color
@@ -213,7 +208,7 @@ if ( ! function_exists( 'flatsome_product_box_class' ) ) {
 	function flatsome_product_box_class() {
 		$classes             = array();
 		$category_grid_style = get_theme_mod( 'category_grid_style', 'grid');
-
+    
 		if ( $category_grid_style == 'list' ) {
 			$classes[] = 'box-vertical';
 		}

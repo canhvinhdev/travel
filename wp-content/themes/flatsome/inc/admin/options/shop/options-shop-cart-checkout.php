@@ -2,7 +2,7 @@
 
 Flatsome_Option::add_section( 'cart-checkout', array(
 	'title'       => __( 'Cart and Checkout', 'flatsome-admin' ),
-	'panel' => 'woocommerce'
+	'panel' => 'shop'
 ) );
 
 
@@ -26,15 +26,6 @@ Flatsome_Option::add_field( '', array(
 	'section'     => 'cart-checkout',
     'default'     => '<div class="options-title-divider">Cart</div>',
 ) );
-
-
-Flatsome_Option::add_field( 'option',  array(
-  'type'        => 'checkbox',
-  'settings'     => 'cart_sticky_sidebar',
-  'label'       => __( 'Sticky sidebar', 'flatsome-admin' ),
-  'section'     => 'cart-checkout',
-  'default' => 0
-));
 
 
 Flatsome_Option::add_field( 'option',  array(
@@ -75,30 +66,6 @@ if( is_nextend_facebook_login() ){
 		'default' => 0
 	));
 }
-
-Flatsome_Option::add_field( 'option',  array(
-  'type'        => 'checkbox',
-  'settings'     => 'checkout_floating_labels',
-  'label'       => __( 'Floating field labels (NEW)', 'flatsome-admin' ),
-  'section'     => 'cart-checkout',
-  'default' => 0
-));
-
-Flatsome_Option::add_field( 'option',  array(
-  'type'        => 'checkbox',
-  'settings'     => 'checkout_fields_email_first',
-  'label'       => __( 'Move E-mail field to first position (NEW)', 'flatsome-admin' ),
-  'section'     => 'cart-checkout',
-  'default' => 0
-));
-
-Flatsome_Option::add_field( 'option',  array(
-  'type'        => 'checkbox',
-  'settings'     => 'checkout_sticky_sidebar',
-  'label'       => __( 'Sticky sidebar (NEW)', 'flatsome-admin' ),
-  'section'     => 'cart-checkout',
-  'default' => 0
-));
 
 Flatsome_Option::add_field( 'option',  array(
 	'type'        => 'textarea',

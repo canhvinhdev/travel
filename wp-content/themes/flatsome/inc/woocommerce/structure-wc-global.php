@@ -1,22 +1,11 @@
 <?php
 
 function flatsome_woocommerce_setup() {
-	// Theme support for default WC gallery.
-	if ( get_theme_mod( 'product_gallery_woocommerce') ) {
-		add_theme_support( 'wc-product-gallery-slider' );
-		// Force default lightbox when default gallery is chosen.
-		if ( get_theme_mod( 'product_lightbox','default' ) !== 'default' ) {
-			set_theme_mod( 'product_lightbox', 'default' );
-		}
-	}
-	// Theme support for default WC gallery lightbox.
-	if ( get_theme_mod( 'product_lightbox','default' ) === 'default' ) {
-		add_theme_support( 'wc-product-gallery-lightbox' );
-	}
-	// Remove default row and column options.
-	remove_theme_support( 'product_grid' );
+  if(get_theme_mod('product_lightbox','default') == 'default') {
+    add_theme_support( 'wc-product-gallery-lightbox');
+  }
 }
-add_action( 'after_setup_theme', 'flatsome_woocommerce_setup', 90 );
+add_action( 'after_setup_theme', 'flatsome_woocommerce_setup', 90);
 
 
 if ( ! function_exists( 'flatsome_woocommerce_add_notice' ) ) {
@@ -57,48 +46,34 @@ function flatsome_remove_logout_account_item( $items ) {
 add_filter( 'woocommerce_account_menu_items', 'flatsome_remove_logout_account_item' );
 
 
-/**
- * Conditionally remove WooCommerce styles and/or scripts.
- */
+/* Setup Flatsome Scripts and CSS */
 function flatsome_woocommerce_scripts_styles() {
-	// Remove default WooCommerce Lightbox.
-	if ( get_theme_mod( 'product_lightbox', 'default' ) !== 'woocommerce' || ! is_product() ) {
-		wp_dequeue_style( 'woocommerce_prettyPhoto_css' );
-		wp_deregister_style( 'woocommerce_prettyPhoto_css' );
 
-		wp_dequeue_script( 'prettyPhoto' );
-		wp_dequeue_script( 'prettyPhoto-init' );
-	}
+  // Remove default WooCommerce Lightbox
+  if(get_theme_mod('product_lightbox','default') !== 'woocommerce' || !is_product()){
+    wp_deregister_style( 'woocommerce_prettyPhoto_css' );
+    wp_dequeue_script( 'prettyPhoto' );
+    wp_dequeue_script( 'prettyPhoto-init' );
+  }
 
-	if ( ! is_admin() ) {
-		wp_dequeue_style( 'woocommerce-layout' );
-		wp_deregister_style( 'woocommerce-layout' );
-		wp_dequeue_style( 'woocommerce-smallscreen' );
-		wp_deregister_style( 'woocommerce-smallscreen' );
-		wp_dequeue_style( 'woocommerce-general' );
-		wp_deregister_style( 'woocommerce-general' );
-	}
+  if ( ! is_admin() ) {
+    wp_deregister_style('woocommerce-layout');
+    wp_deregister_style('woocommerce-smallscreen');
+    wp_deregister_style('woocommerce-general');
+  }
+
 }
+add_action( 'wp_enqueue_scripts', 'flatsome_woocommerce_scripts_styles',98);
 
-add_action( 'wp_enqueue_scripts', 'flatsome_woocommerce_scripts_styles', 98 );
 
-
-// Set Lazy load Image height for Product Images
-if( get_theme_mod( 'lazy_load_images' ) ) {
-	function flatsome_lazy_load_product_image_size() {
-		if ( fl_woocommerce_version_check( '3.3.0' ) ) {
-			$image_sizes  = wc_get_image_size( 'thumbnail' );
-			$image_width  = $image_sizes['width'];
-			$image_height = $image_sizes['height'] !== '' ? $image_sizes['height'] : $image_sizes['width'];
-		} else {
-			$image_sizes  = get_option( 'shop_catalog_image_size' );
-			$image_width  = $image_sizes['width'];
-			$image_height = $image_sizes['height'];
-		}
-		$new_height = 100 / ( $image_width / $image_height ) . '%';
-		echo '<style>.product-gallery img.lazy-load, .product-small img.lazy-load, .product-small img[data-lazy-srcset]:not(.lazyloaded){ padding-top: ' . $new_height . ';}</style>';
-	}
-	add_filter( 'wp_head', 'flatsome_lazy_load_product_image_size' );
+// Set Layzy load Image height for Product Images
+if(get_theme_mod('lazy_load_images')){
+  function flatsome_lazy_load_product_image_size() {
+      $image_size = get_option( 'shop_catalog_image_size' );
+      $new_height = 100 / ($image_size['width'] / $image_size['height']).'%';
+      echo '<style>.product-gallery img.lazy-load, .product-small img.lazy-load, .product-small img[data-lazy-srcset]:not(.lazyloaded){ padding-top: '.$new_height.';}</style>';
+  }
+  add_filter('wp_head', 'flatsome_lazy_load_product_image_size');
 }
 
 
@@ -272,8 +247,6 @@ function flatsome_pages_in_search_results(){
 
       wp_reset_query();
 
-      do_action( 'flatsome_products_page_loader' );
-
       if(!empty($posts) || !empty($pages)){
         echo '<hr/>';
         echo '<h4 class="uppercase">'.__('Pages and posts found','flatsome').'</h4>';
@@ -290,59 +263,46 @@ add_action('woocommerce_after_main_content','flatsome_pages_in_search_results', 
 
 
 
-/**
- * Calculates discount percentage for the product sale bubble for
- * simple, variable or external product types. Returns base bubble text
- * with or without formatting otherwise.
- *
-* @param $product
- *
-* @return string
- */
-function flatsome_presentage_bubble( $product ) {
-
-	if ( $product->is_type( 'simple' ) || $product->is_type( 'external' ) ) {
-		$regular_price  = $product->get_regular_price();
-		$sale_price     = $product->get_sale_price();
-		$bubble_content = round( ( ( floatval( $regular_price ) - floatval( $sale_price ) ) / floatval( $regular_price ) ) * 100 );
-	} elseif ( $product->is_type( 'variable' ) ) {
-		$available_variations = $product->get_available_variations();
-		$maximumper           = 0;
-
-		for ( $i = 0; $i < count( $available_variations ); ++ $i ) {
-			$variation_id     = $available_variations[ $i ]['variation_id'];
-			$variable_product = new WC_Product_Variation( $variation_id );
-			if ( ! $variable_product->is_on_sale() ) {
-				continue;
-			}
-			$regular_price = $variable_product->get_regular_price();
-			$sale_price    = $variable_product->get_sale_price();
-			$percentage    = round( ( ( floatval( $regular_price ) - floatval( $sale_price ) ) / floatval( $regular_price ) ) * 100 );
-			if ( $percentage > $maximumper ) {
-				$maximumper = $percentage;
-			}
-		}
-		$bubble_content = sprintf( __( '%s', 'woocommerce' ), $maximumper );
-	} else {
-		// Set default and return if the product type doesn't meet specification.
-		$bubble_content = __( 'Sale!', 'woocommerce' );
-
-		return $bubble_content;
-	}
-
-	// Process custom formatting. Keep mod value double check to process % for default parameter (See sprintf()).
-	$formatting = get_theme_mod( 'sale_bubble_percentage_formatting' );
-	$formatting = $formatting ? $formatting : '-{value}%';
-	$bubble_content = str_replace( '{value}', $bubble_content, $formatting );
-
-	return $bubble_content;
+// Get presentage bubble
+function flatsome_presentage_bubble($product){
+  $price = '';
+  $regular_price = $product->get_regular_price();
+  $sale_price = $product->get_sale_price();
+  if($product->is_type( 'simple' ) ||$product->is_type( 'external' )){
+      $price = round( ( ( floatval($regular_price) - floatval($sale_price) ) / floatval($regular_price) ) * 100 );
+  } else if($product->is_type( 'variable' )){
+    $price = '';
+    $available_variations = $product->get_available_variations();
+    $maximumper = 0;
+    for ($i = 0; $i < count($available_variations); ++$i) {
+      $variation_id=$available_variations[$i]['variation_id'];
+      $variable_product1= new WC_Product_Variation( $variation_id );
+      if ( ! $variable_product1->is_on_sale() ) continue;
+      $regular_price = $variable_product1 -> get_regular_price();
+      $sale_price = $variable_product1 -> get_sale_price();
+      $percentage= round( ( ( floatval($regular_price) - floatval($sale_price) ) / floatval($regular_price) ) * 100 );
+        if ($percentage > $maximumper) {
+          $maximumper = $percentage;
+        }
+    }
+    $price = sprintf( __('%s', 'woocommerce' ), $maximumper);
+  } else {
+    $price = __( 'Sale!', 'woocommerce' );
+  }
+  if (get_theme_mod('sale_bubble_percentage_formatting')) {
+  $formatting = get_theme_mod('sale_bubble_percentage_formatting' , '-{value}%' );
+    } else {
+  $formatting = '-{value}%';      
+    }
+  $price =  str_replace( '{value}', $price, $formatting);
+  return $price;
 }
 
 
 // Account login style
 function flatsome_account_login_lightbox(){
   // Show Login Lightbox if selected
-  if (!is_checkout() && !is_user_logged_in() && get_theme_mod('account_login_style','lightbox') == 'lightbox') {
+  if ( !is_user_logged_in() && get_theme_mod('account_login_style','lightbox') == 'lightbox') {
     $is_facebook_login = is_nextend_facebook_login();
     $is_google_login = is_nextend_google_login();
     wp_enqueue_script( 'wc-password-strength-meter' );
@@ -375,29 +335,4 @@ if(get_theme_mod('disable_reviews')){
      unset($tabs['reviews']);
      return $tabs;
     }
-}
-
-if( !function_exists('flatsome_wc_get_gallery_image_html') ) {
-  // Copied and modified from woocommerce plugin and wc_get_gallery_image_html helper function.
-  function flatsome_wc_get_gallery_image_html( $attachment_id, $main_image = false, $size = 'woocommerce_single' ) {
-    $gallery_thumbnail = wc_get_image_size( 'gallery_thumbnail' );
-    $thumbnail_size    = apply_filters( 'woocommerce_gallery_thumbnail_size', array( $gallery_thumbnail['width'], $gallery_thumbnail['height'] ) );
-    $image_size        = apply_filters( 'woocommerce_gallery_image_size', $size );
-    $full_size         = apply_filters( 'woocommerce_gallery_full_size', apply_filters( 'woocommerce_product_thumbnails_large_size', 'full' ) );
-    $thumbnail_src     = wp_get_attachment_image_src( $attachment_id, $thumbnail_size );
-    $full_src          = wp_get_attachment_image_src( $attachment_id, $full_size );
-    $image             = wp_get_attachment_image( $attachment_id, $image_size, false, array(
-      'title'                   => get_post_field( 'post_title', $attachment_id ),
-      'data-caption'            => get_post_field( 'post_excerpt', $attachment_id ),
-      'data-src'                => $full_src[0],
-      'data-large_image'        => $full_src[0],
-      'data-large_image_width'  => $full_src[1],
-      'data-large_image_height' => $full_src[2],
-      'class'                   => $main_image ? 'wp-post-image' : '',
-    ) );
-
-    $image_wrapper_class = $main_image ? 'slide first' : 'slide';
-
-    return '<div data-thumb="' . esc_url( $thumbnail_src[0] ) . '" class="woocommerce-product-gallery__image '.$image_wrapper_class.'"><a href="' . esc_url( $full_src[0] ) . '">' . $image . '</a></div>';
-  }
 }

@@ -61,6 +61,4 @@
 	</div>
 <?php endif; ?>
 
-<?php if ( get_theme_mod( 'blog_single_next_prev_nav', 1 ) ) :
-	flatsome_content_nav( 'nav-below' );
-endif; ?>
+<?php flatsome_content_nav( 'nav-below' ); ?>

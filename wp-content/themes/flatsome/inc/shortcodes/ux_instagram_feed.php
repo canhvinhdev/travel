@@ -19,18 +19,17 @@ function ux_instagram_feed( $atts, $content = null ) {
 		'slider_nav_color'    => '',
 		'slider_nav_style'    => '',
 		'slider_nav_position' => '',
-		'slider_bullets'      => 'false',
 		'width'               => '',
 		'depth'               => '',
 		'depth_hover'         => '',
 		'animate'             => '',
-		'auto_slide'          => '',
 		// Image.
 		'lightbox'            => '',
 		'image_overlay'       => '',
 		'image_hover'         => 'overlay-remove',
 		'size'                => 'small', // small - thumbnail - original.
-	), $atts ) );
+		), $atts )
+	);
 
 	ob_start();
 
@@ -55,8 +54,6 @@ function ux_instagram_feed( $atts, $content = null ) {
 			$repeater['slider_style']        = $slider_nav_style;
 			$repeater['slider_nav_position'] = $slider_nav_position;
 			$repeater['slider_nav_color']    = $slider_nav_color;
-			$repeater['slider_bullets']      = $slider_bullets;
-			$repeater['auto_slide']          = $auto_slide;
 			$repeater['row_spacing']         = $col_spacing;
 			$repeater['row_width']           = $width;
 			$repeater['columns']             = $columns;
@@ -114,10 +111,8 @@ add_shortcode( 'ux_instagram_feed', 'ux_instagram_feed' );
 function flatsome_scrape_instagram( $username ) {
 	$username = strtolower( $username );
 	$username = str_replace( '@', '', $username );
-	$transient_name = 'instagram-a7-' . sanitize_title_with_dashes( $username );
-	$instagram = get_transient( $transient_name );
 
-	if ( false === $instagram ) {
+	if ( false === ( $instagram = get_transient( 'instagram-a5-' . sanitize_title_with_dashes( $username ) ) ) ) {
 
 		$remote = wp_remote_get( 'http://instagram.com/' . trim( $username ) );
 
@@ -137,55 +132,58 @@ function flatsome_scrape_instagram( $username ) {
 			return new WP_Error( 'bad_json', esc_html__( 'Instagram has returned invalid data.', 'flatsome-admin' ) );
 		}
 
-		if ( isset( $insta_array['entry_data']['ProfilePage'][0]['graphql']['user']['edge_owner_to_timeline_media']['edges'] ) ) {
-			$edges = $insta_array['entry_data']['ProfilePage'][0]['graphql']['user']['edge_owner_to_timeline_media']['edges'];
+		if ( isset( $insta_array['entry_data']['ProfilePage'][0]['user']['media']['nodes'] ) ) {
+			$images = $insta_array['entry_data']['ProfilePage'][0]['user']['media']['nodes'];
 		} else {
 			return new WP_Error( 'bad_json_2', esc_html__( 'Instagram has returned invalid data.', 'flatsome-admin' ) );
 		}
 
-		if ( ! is_array( $edges ) ) {
+		if ( ! is_array( $images ) ) {
 			return new WP_Error( 'bad_array', esc_html__( 'Instagram has returned invalid data.', 'flatsome-admin' ) );
 		}
 
 		$instagram = array();
 
-		foreach ( $edges as $edge ) {
-			$edge['node']['thumbnail_src'] = preg_replace( '/^https?\:/i', '', $edge['node']['thumbnail_src'] );
-			$edge['node']['display_url']   = preg_replace( '/^https?\:/i', '', $edge['node']['display_url'] );
+		foreach ( $images as $image ) {
+			$image['thumbnail_src'] = preg_replace( '/^https?\:/i', '', $image['thumbnail_src'] );
+			$image['display_src']   = preg_replace( '/^https?\:/i', '', $image['display_src'] );
 
-			if ( isset( $edge['node']['thumbnail_resources'] ) && is_array( $edge['node']['thumbnail_resources'] ) ) {
-				$edge['node']['thumbnail'] = set_url_scheme( $edge['node']['thumbnail_resources'][0]['src'] ); // 150x150
-//				$edge['node']['thumbnail'] = set_url_scheme( $edge['node']['thumbnail_resources'][1]['src'] ); // 240x240
-				$edge['node']['small']     = set_url_scheme( $edge['node']['thumbnail_resources'][2]['src'] ); // 320x320
-//				$edge['node']['thumbnail'] = set_url_scheme( $edge['node']['thumbnail_resources'][3]['src'] ); // 480x480
-//				$edge['node']['thumbnail'] = set_url_scheme( $edge['node']['thumbnail_resources'][4]['src'] ); // 640x640
+			// Handle both types of CDN url.
+			if ( ( strpos( $image['thumbnail_src'], 's640x640' ) !== false ) ) {
+				$image['thumbnail'] = str_replace( 's640x640', 's160x160', $image['thumbnail_src'] );
+				$image['small']     = str_replace( 's640x640', 's320x320', $image['thumbnail_src'] );
 			} else {
-				$edge['node']['thumbnail'] = $edge['node']['small'] = $edge['node']['thumbnail_src'];
+				$urlparts  = wp_parse_url( $image['thumbnail_src'] );
+				$pathparts = explode( '/', $urlparts['path'] );
+				array_splice( $pathparts, 3, 0, array( 's160x160' ) );
+				$image['thumbnail'] = '//' . $urlparts['host'] . implode( '/', $pathparts );
+				$pathparts[3]       = 's320x320';
+				$image['small']     = '//' . $urlparts['host'] . implode( '/', $pathparts );
 			}
 
-			$edge['node']['large'] = $edge['node']['thumbnail_src'];
+			$image['large'] = $image['thumbnail_src'];
 
-			if ( $edge['node']['is_video'] == true ) {
+			if ( $image['is_video'] == true ) {
 				$type = 'video';
 			} else {
 				$type = 'image';
 			}
 
 			$caption = __( 'Instagram Image', 'flatsome-admin' );
-			if ( ! empty( $edge['node']['edge_media_to_caption']['edges'][0]['node']['text'] ) ) {
-				$caption = wp_kses( $edge['node']['edge_media_to_caption']['edges'][0]['node']['text'], array() );
+			if ( ! empty( $image['caption'] ) ) {
+				$caption = $image['caption'];
 			}
 
 			$instagram[] = array(
 				'description' => $caption,
-				'link'        => trailingslashit( '//instagram.com/p/' . $edge['node']['shortcode'] ),
-				'time'        => $edge['node']['taken_at_timestamp'],
-				'comments'    => $edge['node']['edge_media_to_comment']['count'],
-				'likes'       => $edge['node']['edge_liked_by']['count'],
-				'thumbnail'   => $edge['node']['thumbnail'],
-				'small'       => $edge['node']['small'],
-				'large'       => $edge['node']['large'],
-				'original'    => $edge['node']['display_url'],
+				'link'        => trailingslashit( '//instagram.com/p/' . $image['code'] ),
+				'time'        => $image['date'],
+				'comments'    => $image['comments']['count'],
+				'likes'       => $image['likes']['count'],
+				'thumbnail'   => $image['thumbnail'],
+				'small'       => $image['small'],
+				'large'       => $image['large'],
+				'original'    => $image['display_src'],
 				'type'        => $type,
 			);
 		}
@@ -193,7 +191,7 @@ function flatsome_scrape_instagram( $username ) {
 		// Do not set an empty transient, helps catching private or empty accounts.
 		if ( ! empty( $instagram ) ) {
 			$instagram = base64_encode( serialize( $instagram ) ); //100% safe - ignore theme check nag
-			set_transient( $transient_name, $instagram, apply_filters( 'null_instagram_cache_time', HOUR_IN_SECONDS * 2 ) );
+			set_transient( 'instagram-a5-' . sanitize_title_with_dashes( $username ), $instagram, apply_filters( 'null_instagram_cache_time', HOUR_IN_SECONDS * 2 ) );
 		}
 	}
 

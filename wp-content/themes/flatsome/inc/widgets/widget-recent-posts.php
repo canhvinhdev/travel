@@ -17,7 +17,7 @@ class Flatsome_Recent_Post_Widget extends WP_Widget {
 	function __construct() {
 		$widget_ops = array( 'classname' => 'flatsome_recent_posts', 'description' => __('A widget that displays recent posts ', 'flatsome'), 'customize_selective_refresh' => true);
 
-		$control_ops = array( 'id_base' => 'flatsome_recent_posts' );
+		$control_ops = array( 'width' => 300, 'height' => 350, 'id_base' => 'flatsome_recent_posts' );
 
 		parent::__construct( 'flatsome_recent_posts', __('Flatsome Recent Posts', 'flatsome'), $widget_ops, $control_ops );
 	}
@@ -117,8 +117,8 @@ class Flatsome_Recent_Post_Widget extends WP_Widget {
 		<p><label for="<?php echo $this->get_field_id( 'number' ); ?>"><?php _e( 'Number of posts to show:', 'flatsome' ); ?></label>
 		<input id="<?php echo $this->get_field_id( 'number' ); ?>" name="<?php echo $this->get_field_name( 'number' ); ?>" type="text" value="<?php echo $number; ?>" size="3" /></p>
 
- 		<p><input class="checkbox" type="checkbox" <?php checked($instance['image'], 'on'); ?> id="<?php echo $this->get_field_id('image'); ?>" name="<?php echo $this->get_field_name('image'); ?>" />
-		<label for="<?php echo $this->get_field_id( 'image' ); ?>"><?php _e( 'Show Thumbnail', 'flatsome' ); ?></label></p>
+		<p><label for="<?php echo $this->get_field_id( 'image' ); ?>"><?php _e( 'Show Thumbnail', 'flatsome' ); ?></label>
+ 		<input class="checkbox" type="checkbox" <?php checked($instance['image'], 'on'); ?> id="<?php echo $this->get_field_id('image'); ?>" name="<?php echo $this->get_field_name('image'); ?>" />
 
 <?php
 	}

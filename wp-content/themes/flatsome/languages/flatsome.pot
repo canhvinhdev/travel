@@ -664,8 +664,3 @@ msgstr ""
 #@ flatsome
 msgid "Location"
 msgstr ""
-
-#: inc/extensions/flatsome-infinite-scroll/templates/button.php:2
-#@ flatsome
-msgid "View more"
-msgstr ""

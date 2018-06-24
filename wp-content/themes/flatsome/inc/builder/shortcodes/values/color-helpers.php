@@ -11,10 +11,10 @@ return array(
 	),
 	array(
 		'title' => 'Primary',
-		'value' => get_theme_mod( 'color_primary', Flatsome_Default::COLOR_PRIMARY ),
+		'value' => get_theme_mod( 'color_primary', flatsome_default_color( 'color_primary' ) ),
 	),
 	array(
 		'title' => 'Success',
-		'value' => get_theme_mod( 'color_success', Flatsome_Default::COLOR_SUCCESS ),
+		'value' => get_theme_mod( 'color_success', flatsome_default_color( 'color_success' ) ),
 	),
 );

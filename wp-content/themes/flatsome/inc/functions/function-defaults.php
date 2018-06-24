@@ -142,3 +142,27 @@ if(!function_exists('flatsome_defaults')){
     if(!empty($df[$option])) return $df[$option];
   };
 }
+
+/**
+ * Returns the color value for flatsome default colors
+ *
+ * @param string $color_setting Color setting name.
+ * @return string Color value.
+ */
+function flatsome_default_color( $color_setting ) {
+	if( ! is_string( $color_setting ) )
+		throw new InvalidArgumentException( 'flatsome_default_color function only accepts a string. Input was: '. $color_setting );
+
+	switch ( $color_setting ) {
+		case 'color_primary':
+			return '#446084';
+		case 'color_secondary':
+			return '#d26e4b';
+		case 'color_success':
+			return '#7a9c59';
+		case 'color_alert':
+			return '#b20000';
+		default:
+			throw new InvalidArgumentException( 'flatsome_default_color unknown color setting: '. $color_setting );
+	}
+}

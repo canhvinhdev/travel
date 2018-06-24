@@ -4,9 +4,9 @@
  *
  * Override this template by copying it to yourtheme/woocommerce/content-single-product.php
  *
- * @author        WooThemes
- * @package       WooCommerce/Templates
- * @version       3.0.0
+ * @author 		WooThemes
+ * @package 	WooCommerce/Templates
+ * @version     3.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -14,54 +14,34 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 ?>
-<div class="container">
-	<?php
+<div id="product-<?php the_ID(); ?>" <?php post_class(); ?>>
+<?php
 	/**
-	 * Hook Woocommerce_before_single_product.
+	 * woocommerce_before_single_product hook
 	 *
 	 * @hooked wc_print_notices - 10
 	 */
-	do_action( 'woocommerce_before_single_product' );
-	if ( post_password_required() ) {
-		echo get_the_password_form(); // WPCS: XSS ok.
+	 do_action( 'woocommerce_before_single_product' );
 
-		return;
-	}
-	?>
-</div><!-- /.container -->
-<div id="product-<?php the_ID(); ?>" <?php post_class(); ?>>
+	 if ( post_password_required() ) {
+	 	echo get_the_password_form();
+	 	return;
+	 }
+   echo '<div class="custom-product-page">';
 
-	<div class="custom-product-page">
+   if(!get_theme_mod('product_custom_layout')){
+    echo '<p class="lead shortcode-error">Create a custom product layout by using the UX Builder. You need to select a Block as custom product layout and then open it in the UX Builder from the product page.</p>';
 
-		<?php
-		if ( get_theme_mod( 'product_custom_layout' ) ) :
-			echo do_shortcode( '[block id="' . get_theme_mod( 'product_custom_layout' ) . '"]' );
-			?>
-			<div id="product-sidebar" class="mfp-hide">
-				<div class="sidebar-inner">
-					<?php
-					do_action( 'flatsome_before_product_sidebar' );
-					/**
-					 * woocommerce_sidebar hook
-					 *
-					 * @hooked woocommerce_get_sidebar - 10
-					 */
-					if ( is_active_sidebar( 'product-sidebar' ) ) {
-						dynamic_sidebar( 'product-sidebar' );
-					} elseif ( is_active_sidebar( 'shop-sidebar' ) ) {
-						dynamic_sidebar( 'shop-sidebar' );
-					}
-					?>
-				</div><!-- .sidebar-inner -->
-			</div>
-			<?php
-		else :
-			echo '<p class="lead shortcode-error">Create a custom product layout by using the UX Builder. You need to select a Block as custom product layout and then open it in the UX Builder from the product page.</p>';
-		endif;
-		?>
+   } else {
+     echo do_shortcode('[block id="'.get_theme_mod('product_custom_layout').'"]');
+   }
 
-	</div>
+   echo '</div>';
 
-	<?php do_action( 'woocommerce_after_single_product' ); ?>
+   echo '<style>.custom-product-page .shortcode-error{padding: 15% 10%; text-align:center;} </style>';
 
+
+	 do_action( 'woocommerce_after_single_product' );
+
+?>
 </div>
